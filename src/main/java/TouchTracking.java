@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-class DragCircle extends JPanel implements ChangeListener {
+class TouchTracking extends JPanel implements ChangeListener {
 
 
     @Override
@@ -18,17 +18,17 @@ class DragCircle extends JPanel implements ChangeListener {
     }
 
     private final class DragTracker extends MouseAdapter {
-        private Point last;
+        private Point lastPoint;
 
         @Override
         public void mousePressed(MouseEvent m) {
-            last = m.getPoint();
-            x = last.x;
-            y = last.y;
+            lastPoint = m.getPoint();
+            x = lastPoint.x;
+            y = lastPoint.y;
             width = 15;
             height = 15;
-            lastNX.add(last.x);
-            lastNY.add(last.y);
+            lastNX.add(lastPoint.x);
+            lastNY.add(lastPoint.y);
             repaint();
         }
 
@@ -39,13 +39,13 @@ class DragCircle extends JPanel implements ChangeListener {
 
         @Override
         public void mouseDragged(MouseEvent m) {
-            int dx = m.getX() - last.x;
-            int dy = m.getY() - last.y;
+            int dx = m.getX() - lastPoint.x;
+            int dy = m.getY() - lastPoint.y;
             x += dx;
             y += dy;
-            last = m.getPoint();
-            lastNX.add(last.x);
-            lastNY.add(last.y);
+            lastPoint = m.getPoint();
+            lastNX.add(lastPoint.x);
+            lastNY.add(lastPoint.y);
             repaint();
         }
     }
@@ -66,7 +66,7 @@ class DragCircle extends JPanel implements ChangeListener {
 
     private DragTracker dragTracker;
 
-    public DragCircle() {
+    public TouchTracking() {
         setBackground(Color.WHITE);
         dragTracker = new DragTracker();
         addMouseListener(dragTracker);
@@ -119,7 +119,7 @@ class DragCircle extends JPanel implements ChangeListener {
         JFrame jFrame = new JFrame();
         JPanel panel = new JPanel();
         jFrame.setSize(750, 750);
-        DragCircle dragCircle = new DragCircle();
+        TouchTracking touchTracking = new TouchTracking();
         panel.add(mafButton);
         panel.add(harmonicButton);
         JLabel numTapsLabel = new JLabel("Number of taps:");
@@ -127,8 +127,8 @@ class DragCircle extends JPanel implements ChangeListener {
         panel.add(numTapsSpinner);
         panel.setSize(panel.getPreferredSize());
         jFrame.add(panel, BorderLayout.NORTH);
-        jFrame.add(new DragCircle());
-        numTapsSpinner.addChangeListener(dragCircle);
+        jFrame.add(new TouchTracking());
+        numTapsSpinner.addChangeListener(touchTracking);
         jFrame.setVisible(true);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
